@@ -1,0 +1,78 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>TEXT-TO-SPEECH</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="./voices.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div>
+                <h1 style="text-align:center;margin-top: 5%; text-decoration: underline;">TEXT TO SPEECH</h1>
+                <div style="width:30%;margin:10% auto;">
+
+                    <form  id="voice-form">
+                        <div class="voice-form">
+                            <input class="form-control" type="text" name="text" placeholder="Text" id='text'>    
+                        </div>
+                        <div class="voice-form">
+                            <button  id="btn1" style="margin-left: 25%; margin-top: 25px; background-image: url(https://cdn2.iconfinder.com/data/icons/iconslandplayer/PNG/128x128/CircleBordered/StepForwardDisabled.png);background-size:100% 100%;
+                            height: 30px; width: 30px;"></button>    
+                        
+                            <button  id="btn2" style="margin-left: 10%; margin-top: 25px; background-image: url(https://cdn2.iconfinder.com/data/icons/iconslandplayer/PNG/128x128/PlainGreen/PauseDisabled.png);background-size:100% 100%;
+                            height: 30px; width: 30px;"></button>    
+                        
+                            <button id="btn3" style="margin-left: 10%; margin-top: 25px;background-image: url(https://cdn2.iconfinder.com/data/icons/iconslandplayer/PNG/128x128/CircleBordered/Stop1Disabled.png);background-size:100% 100%;
+                            height: 30px; width: 30px;"></button>    
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            let paused=false;
+            let speaking=false;
+            window.addEventListener('DOMContentLoaded',function() {
+              const form = document.getElementById('voice-form');
+              const input = document.getElementById('text');
+              document.getElementById('btn1').addEventListener('click',function(event) {
+                event.preventDefault();
+                if(paused && !speaking)
+                {
+                    speechSynthesis.resume();
+                    speaking=true;
+                    paused=false;
+                }
+                else{
+                const toSay = input.value.trim();
+                const utterance = new SpeechSynthesisUtterance(toSay);
+                speaking=true;
+                speechSynthesis.speak(utterance);
+                utterance.onend=function(evt){
+                speaking=false;
+                }
+                }
+              });
+              
+              document.getElementById('btn2').addEventListener('click',function(event) {
+                event.preventDefault();
+                if(speaking)
+                {
+                    speechSynthesis.pause();
+                    paused=true;
+                    speaking=false;
+                }
+              });
+              document.getElementById('btn3').addEventListener('click',function(event) {
+                event.preventDefault();
+                speechSynthesis.cancel();
+                speaking=false;
+                paused=false;
+                input.value = '';
+              });
+            });
+        </script>
+    </body>
+</html> 
